@@ -20,6 +20,7 @@ My Personal [Leaderboard] stats:
 
 <pre>
 Day   -Part 1-   -Part 2-
+  2       >24h       >24h
   1       >24h       >24h
 </pre>
 
