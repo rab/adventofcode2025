@@ -47,9 +47,14 @@
 
 # --- Part Two ---
 
-# The big cephalopods come back to check on how things are going. When they see that your grand total doesn't match the one expected by the worksheet, they realize they forgot to explain how to read cephalopod math.
+# The big cephalopods come back to check on how things are going. When they see that your grand
+# total doesn't match the one expected by the worksheet, they realize they forgot to explain how
+# to read cephalopod math.
 
-# Cephalopod math is written right-to-left in columns. Each number is given in its own column, with the most significant digit at the top and the least significant digit at the bottom. (Problems are still separated with a column consisting only of spaces, and the symbol at the bottom of the problem is still the operator to use.)
+# Cephalopod math is written right-to-left in columns. Each number is given in its own column,
+# with the most significant digit at the top and the least significant digit at the
+# bottom. (Problems are still separated with a column consisting only of spaces, and the symbol at
+# the bottom of the problem is still the operator to use.)
 
 # Here's the example worksheet again:
 
@@ -65,8 +70,8 @@
 # Finally, the leftmost problem is 356 * 24 * 1 = 8544
 # Now, the grand total is 1058 + 3253600 + 625 + 8544 = 3263827.
 
-# Solve the problems on the math worksheet again. What is the grand total found by adding together all of the answers to the individual problems?
-
+# Solve the problems on the math worksheet again. What is the grand total found by adding together
+# all of the answers to the individual problems?
 
 require_relative 'input'
 
@@ -84,10 +89,10 @@ end
 
 if testing
   input = <<~END
-  123 328  51 64
-   45 64  387 23
+  123 328  51 64 
+   45 64  387 23 
     6 98  215 314
-  *   +   *   +
+  *   +   *   +  
   END
   expected = 4277556
   expected2 = 3263827
@@ -99,7 +104,7 @@ operands = []
 operations = []
 
 coperands = []
-
+cfinal = [[]]
 part1 = 0
 part2 = 0
 input.each_line(chomp: true) do |line|
@@ -114,15 +119,18 @@ input.each_line(chomp: true) do |line|
     # line.each_char.with_index do |chr,idx|
     #   coperands[idx] << chr
     # end
+    coperands << line.chars
   else
     operations = stuff.map(&:to_sym)
+    coperands.transpose.map(&:join).each do |op|
+      if (x = op.strip).empty?
+        cfinal << []
+      else
+        cfinal.last << x.to_i
+      end
+    end
     break
   end
-end
-
-if debugging
-  # p coperands.map(&:join)
-  p operands.transpose
 end
 
 operands.transpose.each.with_index do |ops, idx|
@@ -140,6 +148,10 @@ if testing && expected
     puts "Expected #{expected}"
     exit 1
   end
+end
+
+operations.each.with_index do |op,idx|
+  part2 += cfinal[idx].reduce(op)
 end
 
 puts "Part 2: ", part2
